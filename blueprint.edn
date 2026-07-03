@@ -1,0 +1,11 @@
+{:itonami.blueprint/id "cloud-itonami-6612"
+ :itonami.blueprint/name "Security and commodity contracts brokerage"
+ :itonami.blueprint/isic-rev5 "6612"
+ :itonami.blueprint/domain :finance/securities-brokerage
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:financial-inclusion :data-sovereignty :transparency]
+ :itonami.blueprint/governor :brokerage-governor
+ :itonami.blueprint/required-technologies [:robotics :identity :forms :dmn :bpmn :audit-ledger :securities]
+ :itonami.blueprint/optional-technologies []
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/robotics true}
