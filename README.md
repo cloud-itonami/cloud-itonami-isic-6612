@@ -1,4 +1,4 @@
-# cloud-itonami-6612
+# cloud-itonami-isic-6612
 
 Open Business Blueprint for **ISIC Rev.5 6612**: Security and commodity contracts brokerage.
 

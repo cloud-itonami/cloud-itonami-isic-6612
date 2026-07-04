@@ -1,4 +1,4 @@
-{:itonami.blueprint/id "cloud-itonami-6612"
+{:itonami.blueprint/id "cloud-itonami-isic-6612"
  :itonami.blueprint/name "Security and commodity contracts brokerage"
  :itonami.blueprint/isic-rev5 "6612"
  :itonami.blueprint/domain :finance/securities-brokerage

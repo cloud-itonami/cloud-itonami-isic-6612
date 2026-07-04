@@ -1,6 +1,6 @@
 # Governance
 
-`cloud-itonami-6612` is an OSS open-business blueprint for security and commodity contracts brokerage -- executing securities/commodity trades on behalf of clients.
+`cloud-itonami-isic-6612` is an OSS open-business blueprint for security and commodity contracts brokerage -- executing securities/commodity trades on behalf of clients.
 Governance covers both the capability layer and the operator model.
 
 ## Maintainers

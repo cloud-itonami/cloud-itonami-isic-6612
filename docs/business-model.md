@@ -2,7 +2,7 @@
 
 ## Classification
 
-- Repository: `cloud-itonami-6612`
+- Repository: `cloud-itonami-isic-6612`
 - ISIC Rev.5: `6612`
 - Activity: security and commodity contracts brokerage -- executing securities/commodity trades on behalf of clients
 - Social impact: financial inclusion, data sovereignty, transparent audit
