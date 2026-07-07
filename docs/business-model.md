@@ -31,6 +31,15 @@
 ## Trust Controls
 
 - no trade is executed on a client's behalf without human sign-off
-- an undisclosed conflict of interest or suitability failure forces a hold, not an override
-- every trade path is auditable
+- a fabricated jurisdiction registration/disclosure citation,
+  unsupported KYC/suitability evidence, an order filed against an
+  inactive account, an undisclosed conflict of interest, an order whose
+  risk level does not match the client's own risk tolerance, or a trade
+  value that does not match this vehicle's own independent recompute --
+  each forces a hold, not an override
+- an order cannot be executed twice: a double-execution attempt is held
+  off this actor's own execution history alone, with no upstream
+  comparison needed
+- every intake, assessment, screening, filing and execution path is
+  auditable
 - emergency manual override paths remain outside LLM control
