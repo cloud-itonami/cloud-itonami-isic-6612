@@ -157,10 +157,11 @@ its own capability lib.
 | `src/brokerage/facts.cljc` | Per-jurisdiction broker-dealer registration/disclosure catalog with an official spec-basis citation per entry, honest coverage reporting |
 | `src/brokerage/brokerllm.cljc` | **Broker-LLM Advisor** -- `mock-advisor` ‖ `llm-advisor`; intake/assessment/conflict-screening/suitability-screening/filing/execution proposals |
 | `src/brokerage/governor.cljc` | **Brokerage Governor** -- 7 HARD checks (spec-basis · evidence-incomplete · account-not-active · order-missing · conflict-of-interest, unconditional evaluation · suitability-failure, unconditional evaluation · trade-value-mismatch, independent recompute) + double-execution guard + 1 soft (confidence/actuation gate) |
+| `src/brokerage/corporate_intel.cljc` | optional cross-reference into [`cloud-itonami-isic-8291`](https://github.com/cloud-itonami/cloud-itonami-isic-8291)'s `:disclosure/screen-name` -- catches an account whose `:client` is clean on every LOCAL field but flagged in 8291's own sourced PEP/sanctions data; wired into `screen-conflict` via an injected fn, default is a no-op so every prior caller's behavior is unchanged unless explicitly opted in |
 | `src/brokerage/phase.cljc` | **Phase 0→3** -- read-only → assisted intake → assisted assess → supervised (execution always human; account intake + order filing auto-eligible, no capital risk) |
 | `src/brokerage/operation.cljc` | **OperationActor** -- langgraph-clj StateGraph |
 | `src/brokerage/sim.cljc` | demo driver |
-| `test/brokerage/*_test.clj` | governor contract · phase invariants · store parity · registry conformance · facts coverage |
+| `test/brokerage/*_test.clj` | governor contract · phase invariants · store parity · registry conformance · facts coverage · corporate-intelligence integration |
 
 ## Business-process coverage (honest)
 

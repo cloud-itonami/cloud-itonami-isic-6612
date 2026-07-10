@@ -64,7 +64,20 @@
                  :jurisdiction "JPN" :status :active}
     "account-5" {:id "account-5" :client "J. Doe" :risk-profile :moderate
                  :investment-objective :growth :conflict-hit? true :disclosure-doc nil
-                 :jurisdiction "JPN" :status :active}}})
+                 :jurisdiction "JPN" :status :active}
+    ;; account-6 exists purely to prove `brokerage.corporate-intel`'s
+    ;; cross-reference into cloud-itonami-isic-8291 catches what this
+    ;; actor's own local-only :conflict-hit? self-declaration would miss:
+    ;; :client is 8291's own demo sanctions-flagged official's name
+    ;; ("Jane Smith (demo)" -- director of 8291's demo `co-200`, see
+    ;; `dossier.store/demo-data`), but every LOCAL field on this account
+    ;; is clean (:conflict-hit? false). Without the integration wired in
+    ;; (`brokerage.brokerllm/mock-advisor`'s default no-op screen-fn),
+    ;; this account silently screens :clear -- see
+    ;; `test/brokerage/corporate_intel_test.clj`.
+    "account-6" {:id "account-6" :client "Jane Smith (demo)" :risk-profile :moderate
+                 :investment-objective :growth :conflict-hit? false :disclosure-doc "form-us-****6001"
+                 :jurisdiction "USA" :status :active}}})
 
 ;; ----------------------------- shared commit logic -----------------------------
 

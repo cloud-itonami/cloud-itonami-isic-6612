@@ -19,7 +19,7 @@
       (is (= :moderate (:risk-profile (store/account s "account-1"))))
       (is (false? (:conflict-hit? (store/account s "account-1"))))
       (is (true? (:conflict-hit? (store/account s "account-5"))))
-      (is (= ["account-1" "account-2" "account-3" "account-4" "account-5"]
+      (is (= ["account-1" "account-2" "account-3" "account-4" "account-5" "account-6"]
              (mapv :id (store/all-accounts s))))
       (is (nil? (store/order s "order-1")))
       (is (nil? (store/conflict-of s "account-1")))
