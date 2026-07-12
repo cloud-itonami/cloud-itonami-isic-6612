@@ -94,10 +94,16 @@
   execute the SAME order twice, off this actor's own execution
   history."
   (:require [brokerage.facts :as facts]
+            [brokerage.kernels.gate :as gate]
             [brokerage.registry :as registry]
             [brokerage.store :as store]))
 
-(def confidence-floor 0.6)
+(def confidence-floor
+  "Documented threshold. The DECIDING copy is
+  `brokerage.kernels.gate/confidence-floor-x100` (integer x100 in the
+  safety kernel); this def is kept for callers/docs and pinned equal
+  by `brokerage.kernels.gate-test`."
+  0.6)
 
 (def high-stakes
   "Stakes grave enough to always require a human, even when clean.
@@ -106,6 +112,21 @@
   `cloud-itonami-isic-6511`'s/`6621`'s/`6629`'s single-actuation shape,
   not `6512`'s/`6622`'s/`6520`'s/`6530`'s/`6820`'s dual-actuation one."
   #{:actuation/execute-trade})
+
+(defn- confidence->x100
+  "Host bridge (façade-side, not kernel vocabulary): scale a 0.0..1.0
+  advisor confidence to the kernel's integer x100 wire code."
+  [c]
+  (Math/round (* 100.0 (double c))))
+
+(defn- value->x100
+  "Host bridge (façade-side, not kernel vocabulary): round a monetary
+  order value to the kernel's x100 (cent) integer wire value. Rounding
+  both sides to cents before the in-kernel 1-cent tolerance matches
+  the old |recomputed − claimed| < 0.01 predicate on cent-exact values
+  and absorbs float noise the same way."
+  [v]
+  (Math/round (* 100.0 (double v))))
 
 ;; ----------------------------- checks -----------------------------
 
@@ -196,19 +217,21 @@
       [{:rule :suitability-failure
         :detail "顧客のリスク許容度に適合しない注文を含む提案は進められない"}])))
 
-(defn- close? [a b]
-  (< (Math/abs (- (double a) (double b))) 0.01))
-
 (defn- trade-value-mismatch-violations
   "For `:trade/execute`, INDEPENDENTLY recompute the order's notional
   value via `brokerage.registry/compute-order-value` and compare
   against the order's OWN claimed value -- never trusts a claimed
-  figure as-is."
+  figure as-is. The DECIDING comparison is in-kernel
+  (`gate/value-mismatch` over x100 cent integers against
+  `gate/value-tolerance-x100`, the integer restatement of the old
+  |recomputed - claimed| < 0.01); this façade keeps the
+  human-readable evidence."
   [{:keys [op subject]} st]
   (when (= op :trade/execute)
     (when-let [o (store/order st subject)]
       (let [recomputed (registry/compute-order-value (:quantity o) (:price o))]
-        (when-not (close? recomputed (:claimed-order-value o))
+        (when (= 1 (gate/value-mismatch (value->x100 recomputed)
+                                        (value->x100 (:claimed-order-value o))))
           [{:rule :trade-value-mismatch
             :detail (str subject " の申告額(" (:claimed-order-value o)
                         ")が独自再計算値(" recomputed ")と一致しない")}])))))
@@ -228,24 +251,45 @@
    {:ok? bool :violations [..] :confidence c :escalate? bool :high-stakes? bool
     :hard? bool}."
   [request _context proposal st]
-  (let [hard (into []
-                   (concat (spec-basis-violations request proposal st)
-                           (evidence-incomplete-violations request st)
-                           (account-not-active-violations request st)
-                           (order-missing-violations request st)
-                           (conflict-of-interest-violations request proposal st)
-                           (suitability-failure-violations request proposal st)
-                           (trade-value-mismatch-violations request st)
-                           (double-execution-violations request st)))
+  (let [spec-v (spec-basis-violations request proposal st)
+        evid-v (evidence-incomplete-violations request st)
+        acct-v (account-not-active-violations request st)
+        miss-v (order-missing-violations request st)
+        coi-v  (conflict-of-interest-violations request proposal st)
+        suit-v (suitability-failure-violations request proposal st)
+        val-v  (trade-value-mismatch-violations request st)
+        dbl-v  (double-execution-violations request st)
+        hard (into [] (concat spec-v evid-v acct-v miss-v coi-v suit-v val-v dbl-v))
         conf (:confidence proposal 0.0)
-        low? (< conf confidence-floor)
         stakes? (boolean (high-stakes (:stake proposal)))
-        hard? (boolean (seq hard))]
-    {:ok?          (and (not hard?) (not low?) (not stakes?))
+        o (when (= (:op request) :trade/execute)
+            (store/order st (:subject request)))
+        ;; The decision itself is delegated to the safety kernel
+        ;; (brokerage.kernels.gate, integer-coded fail-closed core);
+        ;; this façade only gathers evidence (violation lists with
+        ;; human-readable details) and maps codes back to keywords.
+        ;; Kernel is stricter than the old inline logic on ONE case by
+        ;; design: an out-of-range confidence (< 0 or > 1.0) now
+        ;; escalates instead of counting as high confidence.
+        code (gate/verdict-code (if (seq spec-v) 1 0)
+                                (if (seq evid-v) 1 0)
+                                (if (seq acct-v) 1 0)
+                                (if (seq miss-v) 1 0)
+                                (if (seq coi-v) 1 0)
+                                (if (seq suit-v) 1 0)
+                                (if o 1 0)
+                                (if o (value->x100 (registry/compute-order-value
+                                                    (:quantity o) (:price o)))
+                                      0)
+                                (if o (value->x100 (:claimed-order-value o)) 0)
+                                (if (seq dbl-v) 1 0)
+                                (confidence->x100 conf)
+                                (if stakes? 1 0))]
+    {:ok?          (= 0 code)
      :violations   hard
      :confidence   conf
-     :hard?        hard?
-     :escalate?    (and (not hard?) (or low? stakes?))
+     :hard?        (= 2 code)
+     :escalate?    (= 1 code)
      :high-stakes? stakes?}))
 
 (defn hold-fact

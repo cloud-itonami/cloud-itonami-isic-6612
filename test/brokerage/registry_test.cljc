@@ -9,8 +9,8 @@
   (is (= 0.0 (r/compute-order-value 0 500))))
 
 (deftest compute-order-value-validation-rules
-  (is (thrown? Exception (r/compute-order-value -1 500)))
-  (is (thrown? Exception (r/compute-order-value 100 -1))))
+  (is (thrown? #?(:clj Exception :cljs js/Error) (r/compute-order-value -1 500)))
+  (is (thrown? #?(:clj Exception :cljs js/Error) (r/compute-order-value 100 -1))))
 
 ;; ----------------------------- suitable-for-account? -----------------------------
 
@@ -47,12 +47,12 @@
     (is (= (get-in result ["record" "immutable"]) true))))
 
 (deftest trade-execution-validation-rules
-  (is (thrown? Exception (r/register-trade-execution "" "order-1" 100 500 50000 "JPN" 0)))
-  (is (thrown? Exception (r/register-trade-execution "account-1" "" 100 500 50000 "JPN" 0)))
-  (is (thrown? Exception (r/register-trade-execution "account-1" "order-1" -1 500 50000 "JPN" 0)))
-  (is (thrown? Exception (r/register-trade-execution "account-1" "order-1" 100 500 -1 "JPN" 0)))
-  (is (thrown? Exception (r/register-trade-execution "account-1" "order-1" 100 500 50000 "" 0)))
-  (is (thrown? Exception (r/register-trade-execution "account-1" "order-1" 100 500 50000 "JPN" -1))))
+  (is (thrown? #?(:clj Exception :cljs js/Error) (r/register-trade-execution "" "order-1" 100 500 50000 "JPN" 0)))
+  (is (thrown? #?(:clj Exception :cljs js/Error) (r/register-trade-execution "account-1" "" 100 500 50000 "JPN" 0)))
+  (is (thrown? #?(:clj Exception :cljs js/Error) (r/register-trade-execution "account-1" "order-1" -1 500 50000 "JPN" 0)))
+  (is (thrown? #?(:clj Exception :cljs js/Error) (r/register-trade-execution "account-1" "order-1" 100 500 -1 "JPN" 0)))
+  (is (thrown? #?(:clj Exception :cljs js/Error) (r/register-trade-execution "account-1" "order-1" 100 500 50000 "" 0)))
+  (is (thrown? #?(:clj Exception :cljs js/Error) (r/register-trade-execution "account-1" "order-1" 100 500 50000 "JPN" -1))))
 
 (deftest execution-history-is-append-only
   (let [e1 (r/register-trade-execution "account-1" "order-1" 100 500 50000 "JPN" 0)
