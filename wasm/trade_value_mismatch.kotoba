@@ -1,0 +1,28 @@
+(ns cloud-itonami-trade-value-mismatch)
+
+(defn trade-value-matches? [quantity price-x100 claimed-value-x100]
+  (= (* quantity price-x100) claimed-value-x100))
+
+;; ABI: `main` stays 0-arity (the compiler rejects a parameterized main --
+;; :main-arity, see kotoba-lang/kotoba's compile-wasm-expr) and reads its
+;; three real i32 inputs out of the exported linear memory instead, at
+;; fixed byte offsets a host writes into before calling main() (same
+;; convention as cloud-itonami-isic-6492's affordability.kotoba /
+;; cloud-itonami-isic-6511's underwriting_decision.kotoba /
+;; cloud-itonami-isic-6630's fee_accrual.kotoba):
+;;   offset 0: quantity             (i32, order quantity -- a unit-less
+;;                                   share/contract count, unscaled)
+;;   offset 4: price-x100           (i32, per-unit price scaled x100 --
+;;                                   the SAME x100 convention
+;;                                   `brokerage.governor/value->x100`
+;;                                   uses for the order's notional value,
+;;                                   e.g. a $500.00 price = 50000)
+;;   offset 8: claimed-value-x100   (i32, the order's OWN claimed
+;;                                   notional value, scaled x100 the same
+;;                                   way -- e.g. a $50,000.00 claimed
+;;                                   value = 5000000)
+;; Returns 1 (the recomputed notional value -- quantity * price-x100 --
+;; matches the claim) or 0 (mismatch -- brokerage.governor's
+;; :trade-value-mismatch HARD violation).
+(defn main []
+  (trade-value-matches? (mem-i32-at 0 0) (mem-i32-at 0 4) (mem-i32-at 0 8)))
