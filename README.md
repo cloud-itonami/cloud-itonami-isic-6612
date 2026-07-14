@@ -162,6 +162,7 @@ its own capability lib.
 | `src/brokerage/operation.cljc` | **OperationActor** -- langgraph-clj StateGraph |
 | `src/brokerage/sim.cljc` | demo driver |
 | `test/brokerage/*_test.clj` | governor contract · phase invariants · store parity · registry conformance · facts coverage · corporate-intelligence integration |
+| `wasm/trade_value_mismatch.kotoba` | PoC: a WASM-compiled (`kotoba-lang/kotoba` -> `kotoba-lang/kototama`'s `actor:host` ABI) x100-fixed-point port of `brokerage.governor`'s `trade-value-mismatch-violations` independent-recompute check (`brokerage.registry/compute-order-value` vs. an order's own claimed value) -- see `wasm/README.md` for the offset layout and scaling rationale |
 
 ## Business-process coverage (honest)
 
