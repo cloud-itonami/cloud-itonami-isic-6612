@@ -1,0 +1,83 @@
+<html><head><meta charset="utf-8"><title>cloud-itonami-isic-6612 &middot; securities/commodity brokerage</title><style>
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.ok { color: #137a3f; }
+body { font-family: system-ui,-apple-system,sans-serif; margin: 0; color: #1a1a1a; background: #fafafa; }
+header.bar { display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #fff; border-bottom: 1px solid #e5e5e5; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #f0f0f0; }
+h2 { margin-top: 0; font-size: 15px; }
+.warn { color: #b25c00; background: #fff8e1; padding: 2px 6px; border-radius: 4px; }
+main { max-width: 980px; margin: 24px auto; padding: 0 20px; }
+header.bar h1 { font-size: 18px; margin: 0; font-weight: 600; }
+.muted { color: #888; font-size: 13px; }
+.critical { color: #fff; background: #b3261e; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+.card { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.err { color: #b3261e; background: #fbe9e7; padding: 2px 6px; border-radius: 4px; }
+th { font-weight: 600; color: #555; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+header.bar .badge { margin-left: auto; font-size: 12px; color: #666; }
+code { font-size: 12px; background: #f4f4f4; padding: 1px 4px; border-radius: 3px; }
+</style></head><body>
+<header class="bar">
+  <h1>Security and commodity contracts brokerage (ISIC 6612) — Operator Console</h1>
+  <span class="badge">read-only sample · governor-gated · trade execution always human-approved</span>
+</header>
+<main>
+  <section class="card">
+    <h2>Client accounts</h2>
+    <p class="muted">Demo snapshot — build-time-generated from <code>brokerage.store</code> via <code>brokerage.render-html</code> (<code>clojure -M:dev:render-html</code>), regenerated nightly.</p>
+    <table>
+      <thead><tr><th>Account</th><th>Client</th><th>Jurisdiction</th><th>Risk profile</th><th>Status</th><th>Last op status</th></tr></thead>
+      <tbody>
+        <tr><td>account-1</td><td>田中 一郎</td><td>JPN</td><td>moderate</td><td>active</td><td><span class="ok">committed</span></td></tr>
+        <tr><td>account-2</td><td>J. Smith</td><td>ATL</td><td>moderate</td><td>active</td><td><span class="critical">HARD hold &middot; no-spec-basis</span></td></tr>
+        <tr><td>account-3</td><td>鈴木 花子</td><td>JPN</td><td>moderate</td><td>intake</td><td><span class="muted">no activity</span></td></tr>
+        <tr><td>account-4</td><td>佐藤 次郎</td><td>JPN</td><td>conservative</td><td>active</td><td><span class="muted">no activity</span></td></tr>
+        <tr><td>account-5</td><td>J. Doe</td><td>JPN</td><td>moderate</td><td>active</td><td><span class="critical">HARD hold &middot; conflict-of-interest</span></td></tr>
+        <tr><td>account-6</td><td>Jane Smith (demo)</td><td>USA</td><td>moderate</td><td>active</td><td><span class="muted">no activity</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="card">
+    <h2>Orders</h2>
+    <p class="muted">Only orders that actually cleared <code>:order/file</code> exist on record — a HARD-held filing attempt (e.g. against an inactive account) never creates an order.</p>
+    <table>
+      <thead><tr><th>Order</th><th>Account</th><th>Security</th><th>Risk level</th><th>Qty</th><th>Price</th><th>Claimed value</th><th>Last op status</th></tr></thead>
+      <tbody>
+        <tr><td>order-1</td><td>account-1</td><td>equity</td><td>medium</td><td>100</td><td>500</td><td>50000</td><td><span class="ok">committed</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="card">
+    <h2>Action gate (Brokerage Governor)</h2>
+    <p class="muted">HARD holds cannot be overridden. Trade values are independently recomputed, never trusted from the proposal; executing a real trade on a client's behalf always requires a licensed broker's approval, at every rollout phase.</p>
+    <table>
+      <thead><tr><th>Op</th><th>Gate</th></tr></thead>
+      <tbody>
+        <tr><td><code>:account/intake</code></td><td><span class="ok">auto-commit when clean, no capital risk</span></td></tr>
+        <tr><td><code>:jurisdiction/assess</code></td><td><span class="warn">ALWAYS human approval &middot; spec-basis required</span></td></tr>
+        <tr><td><code>:conflict/screen</code></td><td><span class="warn">ALWAYS human approval &middot; HARD-holds on any conflict-of-interest hit</span></td></tr>
+        <tr><td><code>:suitability/screen</code></td><td><span class="warn">ALWAYS human approval &middot; HARD-holds on any unsuitable-order finding</span></td></tr>
+        <tr><td><code>:order/file</code></td><td><span class="ok">auto-commit when clean, no capital risk &middot; account must be active</span></td></tr>
+        <tr><td><code>:trade/execute</code></td><td><span class="warn">ALWAYS human approval (actuation) &middot; independent value recompute &middot; double-execution blocked</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="card">
+    <h2>Audit ledger (this run)</h2>
+    <p class="muted">Append-only decision-fact log — every commit and hold this scenario produced.</p>
+    <table>
+      <thead><tr><th>Fact</th><th>Op</th><th>Subject</th><th>Basis</th></tr></thead>
+      <tbody>
+        <tr><td>committed</td><td><code>intake</code></td><td>account-1</td><td>id, client</td></tr>
+        <tr><td>committed</td><td><code>assess</code></td><td>account-1</td><td>金融商品取引法 (Financial Instruments and Exchange Act, FIEA), https://www.fsa.go.jp/</td></tr>
+        <tr><td>committed</td><td><code>screen</code></td><td>account-1</td><td>conflict-check, corporate-intelligence</td></tr>
+        <tr><td>committed</td><td><code>file</code></td><td>order-1</td><td>account-id, quantity, price</td></tr>
+        <tr><td>committed</td><td><code>screen</code></td><td>order-1</td><td>suitability-check</td></tr>
+        <tr><td>committed</td><td><code>execute</code></td><td>order-1</td><td>account-1</td></tr>
+        <tr><td>governor-hold</td><td><code>assess</code></td><td>account-2</td><td>no-spec-basis</td></tr>
+        <tr><td>governor-hold</td><td><code>file</code></td><td>order-2</td><td>account-not-active</td></tr>
+        <tr><td>governor-hold</td><td><code>screen</code></td><td>account-5</td><td>conflict-of-interest</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+</body></html>
