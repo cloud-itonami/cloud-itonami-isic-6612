@@ -5,7 +5,17 @@
  ;; (forkable outside the workspace); the :local/root paths only resolve
  ;; inside the monorepo checkout — a standalone fork should override them
  ;; with git coordinates.
- :deps {io.github.com-junkawasaki/langgraph-clj
+ :deps {
+        io.github.kotoba-lang/jp-go-digital-design-system
+        {:git/url "https://github.com/kotoba-lang/jp-go-digital-design-system"
+         :git/sha "f9ef46980869cc0bedddc3c552ccfd7add7cffe0"}
+        ;; html/css を top-level で git 座標に固定する。推移依存(:local/root)と
+        ;; jp-go-dds(:git/sha)で座標型が違うと tools.deps が版を比較できない。
+        io.github.kotoba-lang/html
+        {:git/url "https://github.com/kotoba-lang/html" :git/sha "00a4c2ad43dde3df9d54b658961143c53945a379"}
+        io.github.kotoba-lang/css
+        {:git/url "https://github.com/kotoba-lang/css" :git/sha "6eda5ee28ec177b9e09fdbee92c55a050b18cf7d"}
+io.github.com-junkawasaki/langgraph-clj
         {:local/root "../../kotoba-lang/langgraph"}
         ;; optional: brokerage.corporate-intel's cross-reference into
         ;; cloud-itonami-isic-8291 (ADR-2607110400 §5 pattern, first
