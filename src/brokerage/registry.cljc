@@ -32,7 +32,7 @@
   dealer would keep, not the act of executing the trade itself (that is
   `brokerage.operation`'s `:trade/execute`, always human-gated -- see
   README `Actuation`)."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 (defn- unsigned-certificate
   "Every certificate this actor produces is UNSIGNED -- signature is the
@@ -100,7 +100,7 @@
     (throw (ex-info "trade-execution: jurisdiction required" {})))
   (when (< sequence 0)
     (throw (ex-info "trade-execution: sequence must be >= 0" {})))
-  (let [trade-number (str (str/upper-case jurisdiction) "-TRD-" (zero-pad sequence 6))
+  (let [trade-number (str (str/upper jurisdiction) "-TRD-" (zero-pad sequence 6))
         record {"record_id" trade-number
                 "kind" "trade-execution-draft"
                 "account_id" account-id
