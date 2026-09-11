@@ -1,5 +1,5 @@
 (ns brokerage.sim
-  "Demo driver -- `clojure -M:dev:run`. Walks a clean account through
+  "Demo driver -- `kbb -M:dev:run`. Walks a clean account through
   intake -> jurisdiction broker-dealer disclosure assessment ->
   conflict-of-interest screening -> order filing (auto-commits; no
   capital risk) -> suitability screening -> trade-execution proposal

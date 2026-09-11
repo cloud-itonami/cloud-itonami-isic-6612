@@ -6,7 +6,7 @@
   no generator at all. This namespace drives the REAL actor stack
   (`brokerage.operation` -> `brokerage.governor` -> `brokerage.store`)
   through a scenario adapted from this repo's own `brokerage.sim` demo
-  driver (`clojure -M:dev:run`, run and read BEFORE writing this file:
+  driver (`kbb -M:dev:run`, run and read BEFORE writing this file:
   its output was cross-checked against `brokerage.store/demo-data`'s
   real seeded ids -- account-1..account-6, order-1..order-4 -- and
   every disposition it prints (auto-commit / escalate+approve / HARD
@@ -21,7 +21,7 @@
   the page content, byte-identical across reruns against the same seed
   (verified by diffing two consecutive runs).
 
-  Usage: `clojure -M:dev:render-html [out-file]`
+  Usage: `kbb -M:dev:render-html [out-file]`
   (default `docs/samples/operator-console.html`)."
   (:require [jp-go-dds.skin]
             [kotoba.lang.text :as str]
@@ -164,7 +164,7 @@
      "<main>\n"
      "  <section class=\"card\">\n"
      "    <h2>Client accounts</h2>\n"
-     "    <p class=\"muted\">Demo snapshot — build-time-generated from <code>brokerage.store</code> via <code>brokerage.render-html</code> (<code>clojure -M:dev:render-html</code>), regenerated nightly.</p>\n"
+     "    <p class=\"muted\">Demo snapshot — build-time-generated from <code>brokerage.store</code> via <code>brokerage.render-html</code> (<code>kbb -M:dev:render-html</code>), regenerated nightly.</p>\n"
      "    <table>\n"
      "      <thead><tr><th>Account</th><th>Client</th><th>Jurisdiction</th><th>Risk profile</th><th>Status</th><th>Last op status</th></tr></thead>\n"
      "      <tbody>\n"

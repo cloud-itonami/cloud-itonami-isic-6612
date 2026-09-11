@@ -34,9 +34,9 @@ io.github.com-junkawasaki/langgraph-clj
   :dev {:override-deps
         {io.github.com-junkawasaki/langchain-clj
          {:local/root "../../kotoba-lang/langchain"}}}
-  ;; clojure -M:dev:run  -> drive the demo through one OperationActor
+  ;; kbb -M:dev:run  -> drive the demo through one OperationActor
   :run {:main-opts ["-m" "brokerage.sim"]}
-  ;; clojure -M:dev:render-html [out-file] -> regenerate docs/samples/operator-console.html
+  ;; kbb -M:dev:render-html [out-file] -> regenerate docs/samples/operator-console.html
   ;; through the real actor (flagship checklist item 2, ADR-2607189300 Wave5 seq 22).
   :render-html {:main-opts ["-m" "brokerage.render-html"]}
   :test {:extra-paths ["test"]
@@ -52,7 +52,7 @@ io.github.com-junkawasaki/langgraph-clj
          :exec-fn cognitect.test-runner.api/test}
   ;; PRIMARY gate: the same portable .cljc suite under a real
   ;; ClojureScript host (runtime priority: cljs first, JVM compat).
-  ;;   clojure -Sdeps '{:paths ["src" "test"]}' -M:dev:cljs \
+  ;;   kbb -Sdeps '{:paths ["src" "test"]}' -M:dev:cljs \
   ;;     -m cljs.main --target node -m brokerage.portable-cljs-test-runner
   :cljs {:extra-deps {org.clojure/clojurescript {:mvn/version "1.11.132"}}}
   ;; static analysis -- clj-kondo from deps (no binary), errors fail CI.
