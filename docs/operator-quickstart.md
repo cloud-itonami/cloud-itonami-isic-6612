@@ -13,7 +13,7 @@ This repository builds on [`langgraph-clj`](https://github.com/com-junkawasaki/l
 Verify the governor contract, phase invariants, store parity, registry conformance, and jurisdiction-facts coverage:
 
 ```bash
-clojure -M:dev:test
+kbb -M:dev:test
 ```
 
 Expected: all tests pass (contract · phase invariants · store parity · registry conformance · facts coverage).
@@ -23,7 +23,7 @@ Expected: all tests pass (contract · phase invariants · store parity · regist
 Walk one clean intake-through-execution lifecycle and seven HARD-hold cases through the actor:
 
 ```bash
-clojure -M:dev:run
+kbb -M:dev:run
 ```
 
 This invokes the **demo driver** (`src/brokerage/sim.cljk`), which exercises:
@@ -44,7 +44,7 @@ Output appears in your terminal and includes:
 Check code style with `clj-kondo` (errors fail CI):
 
 ```bash
-clojure -M:lint
+kbb -M:lint
 ```
 
 ## Where is the Governor?
