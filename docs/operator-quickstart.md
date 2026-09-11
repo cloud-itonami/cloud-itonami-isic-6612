@@ -26,7 +26,7 @@ Walk one clean intake-through-execution lifecycle and seven HARD-hold cases thro
 clojure -M:dev:run
 ```
 
-This invokes the **demo driver** (`src/brokerage/sim.cljc`), which exercises:
+This invokes the **demo driver** (`src/brokerage/sim.cljk`), which exercises:
 - Account intake with jurisdiction registration checklist
 - Conflict-of-interest screening
 - Suitability screening (risk-tolerance matching)
@@ -51,7 +51,7 @@ clojure -M:lint
 
 The **Brokerage Governor** is the independent verification layer that enforces trade-execution policy:
 
-**Source location:** `src/brokerage/governor.cljc`
+**Source location:** `src/brokerage/governor.cljk`
 
 Key functions:
 - `evaluate-proposal` — 7 HARD checks + 1 soft check
@@ -69,14 +69,14 @@ Key functions:
 
 Plus: double-execution guard (trade executed twice = HOLD).
 
-**Operation flow:** `src/brokerage/operation.cljc` — the **OperationActor** (langgraph-clj StateGraph) orchestrates intake → assessment → conflict-screening → suitability-screening → filing → execution proposals, each routed through the Governor before any commit to the audit ledger.
+**Operation flow:** `src/brokerage/operation.cljk` — the **OperationActor** (langgraph-clj StateGraph) orchestrates intake → assessment → conflict-screening → suitability-screening → filing → execution proposals, each routed through the Governor before any commit to the audit ledger.
 
-**Store & ledger:** `src/brokerage/store.cljc` — `MemStore` (testing) or `DatomicStore` (production), with append-only audit ledger and trade-execution history.
+**Store & ledger:** `src/brokerage/store.cljk` — `MemStore` (testing) or `DatomicStore` (production), with append-only audit ledger and trade-execution history.
 
 ## Next steps
 
 1. **Fork this repository** from [github.com/com-junkawasaki/cloud-itonami-isic-6612](https://github.com/com-junkawasaki/cloud-itonami-isic-6612)
-2. **Customize jurisdiction facts** (`src/brokerage/facts.cljc`) — add your jurisdiction's broker-dealer registration/disclosure citations
+2. **Customize jurisdiction facts** (`src/brokerage/facts.cljk`) — add your jurisdiction's broker-dealer registration/disclosure citations
 3. **Deploy the Governor** — wire `operation.cljc` into your trading desk's infrastructure
 4. **Integrate real-time market data** (out of scope; see README for honest scope boundary)
 5. **Set up human approval workflow** — the actor drafts; a licensed broker executes

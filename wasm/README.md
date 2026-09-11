@@ -7,7 +7,7 @@ claimed `:claimed-order-value`, gated in-kernel by
 `brokerage.kernels.gate/value-mismatch` -- see `src/brokerage/
 governor.cljc`'s ns docstring, check 7) into the minimal `.kotoba`
 language subset, compiled to a real WASM module via `kotoba wasm emit`,
-and hosted via `kototama.tender` (`test/wasm/trade_value_mismatch_test.clj`).
+and hosted via `kototama.tender` (`test/wasm/trade_value_mismatch_test.cljk`).
 
 This follows the same `kotoba wasm emit` → `kototama.tender` pipeline
 `cloud-itonami-isic-6492`'s `wasm/affordability.kotoba`,
