@@ -23,7 +23,7 @@
   immutable log -- the audit trail a client trusting a broker with a
   trade needs, and the evidence an operator needs if an execution is
   later disputed."
-  (:require #?(:clj  [clojure.edn :as edn]
+  (:require #?(:clj  [kotoba.lang.edn :as edn]
                :cljs [cljs.reader :as edn])
             [brokerage.registry :as registry]
             [langchain.db :as d]))
