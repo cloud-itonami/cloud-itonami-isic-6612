@@ -46,7 +46,7 @@
             [brokerage.phase-test]
             [brokerage.registry-test]
             [brokerage.store-contract-test]
-            [clojure.test :as t :refer [run-tests]]))
+            [kotoba.test :as t :refer [run-tests]]))
 
 #?(:cljs
    (defmethod t/report [:cljs.test/default :end-run-tests] [m]

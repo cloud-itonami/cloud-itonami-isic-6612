@@ -2,7 +2,7 @@
   "The phase table as executable tests. The invariant this repo cannot
   regress on: `:trade/execute` must NEVER be a member of any phase's
   `:auto` set."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [brokerage.phase :as phase]))
 
 (deftest trade-execute-never-auto-at-any-phase
