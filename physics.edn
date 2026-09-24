@@ -1,0 +1,44 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README "Robotics premise": a document-courier and kiosk robot collects
+;; in-person account-opening signatures (ISIC 6612, security and commodity
+;; contracts brokerage). Its physical work: couriering signed account files to
+;; the back office, driving the signature kiosk up a sidewalk ramp to a client,
+;; and presenting the signature tablet.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-6612"
+ :cases
+ [{:id :signed-files-to-back-office
+   :kind :transport
+   :procedure "courier robot carries a tray of signed account-opening files from the branch lobby to the back-office scanner"
+   :params {:mass-kg 40.0 :distance-m 50.0 :v-max-mps 1.0 :a-max-mps2 0.5
+            :brake-decel-mps2 0.8 :drive-force-n 90.0 :crr 0.02
+            :cog-height-m 0.50 :support-half-length-m 0.25 :max-time-s 1800.0}
+   :sweep {:param :payload-kg :values [2.0 8.0 15.0 30.0 60.0]}
+   :quantity :cycle-time-s
+   :limit {:max 70.0 :basis "estimate: same-visit hand-off to the back office while the client is still at the branch"}
+   :boundary {:lo 1.0 :hi 400.0}}
+  {:id :kiosk-up-sidewalk-ramp
+   :kind :transport
+   :procedure "signature kiosk robot climbs a sidewalk ramp to meet a client at the branch entrance"
+   :params {:mass-kg 50.0 :payload-kg 6.0 :distance-m 12.0 :v-max-mps 0.8 :a-max-mps2 0.4
+            :brake-decel-mps2 1.0 :drive-force-n 220.0 :crr 0.03
+            :cog-height-m 0.70 :payload-cog-height-m 1.05 :support-half-length-m 0.25
+            :max-time-s 1800.0}
+   :sweep {:param :slope-deg :values [0.0 3.0 4.8 7.0 10.0]}
+   :quantity :min-tipover-margin
+   :limit {:min 0.4 :basis "estimate: keep 40 % of the static tip-over margin in reserve next to pedestrians"}
+   :boundary {:lo 0.0 :hi 20.0}}
+  {:id :present-signature-tablet
+   :kind :manipulator
+   :procedure "arm swings the signature tablet from its dock to the client's writing height"
+   :params {:l1-m 0.40 :l2-m 0.35 :m1-kg 3.0 :m2-kg 2.0 :payload-kg 0.8
+            :from [0.15 0.55] :to [0.55 0.25] :steps 500}
+   :sweep {:param :duration-s :values [0.4 0.7 1.0 1.5 2.5]}
+   :quantity :peak-tau1-nm
+   :limit {:max 20.0 :basis "estimate: shoulder torque cap for a power-and-force-limited arm working next to a standing client"}
+   :boundary {:lo 0.2 :hi 5.0}}]}
