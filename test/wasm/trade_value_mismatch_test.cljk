@@ -13,7 +13,7 @@
   wasm/trade_value_mismatch.kotoba's ns-adjacent header comment for the
   offset layout and the x100 fixed-point scaling convention (the SAME
   scale factor `brokerage.governor/value->x100` uses)."
-  (:require [clojure.java.io :as io]
+  (:require [kotoba.io :as io]
             [kotoba.test :refer [deftest is testing]]
             [kototama.contract :as contract]
             [kototama.tender :as tender]))
