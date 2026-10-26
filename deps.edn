@@ -10,32 +10,49 @@
         ;; kotoba.io carries clojure.java.io's file/as-file/as-relative-path/
         ;; make-parents/delete-file from 98045c7, and tools.deps takes the NEWEST
         ;; sha it is shown.
-        io.github.kotoba-lang/io {:git/sha "72dde04b4c32854d70d17a670b277f8f7957a784"}
+        io.github.kotoba-lang/io
+        {:git/url "https://github.com/kotoba-lang/kotoba.git"
+         :git/sha "7e1dbe0aece831138e6106c59d2b26375d0f60c4"
+         :deps/root "lib/kotoba.io"}
         ;; kotoba.lang.edn replaced clojure.edn here (2026-09-23). An explicit floor:
         ;; tools.deps takes the NEWEST sha it is shown, and kbb resolves git deps
         ;; only from nbb.edn, so every project file this repo has names it.
-        io.github.kotoba-lang/edn {:git/sha "79dba32c8892058842c57783f06a2dfe4601aeb0"}
+        io.github.kotoba-lang/edn
+        {:git/url "https://github.com/kotoba-lang/kotoba.git"
+         :git/sha "7e1dbe0aece831138e6106c59d2b26375d0f60c4"
+         :deps/root "lib/kotoba.edn"}
        ;; kotoba.test (clojure.test-compatible surface), not clojure.test --
         ;; scripts/migrate-clojure-test-to-kotoba-test.cljk. Explicit floor.
-        io.github.kotoba-lang/test {:git/url "https://github.com/kotoba-lang/test.git"
-                                    :git/sha "2ab4885f99fd25552d380d0f6b0b54c5a72eb7ae"}
+        io.github.kotoba-lang/test
+        {:git/url "https://github.com/kotoba-lang/kotoba.git"
+         :git/sha "7e1dbe0aece831138e6106c59d2b26375d0f60c4"
+         :deps/root "lib/kotoba.test"}
         ;; kotoba.robotics.process: the process-physics solvers and probe this
         ;; repo's physics.edn runs on (physical-AI bot, scripts/physical-ai-bots).
-        io.github.kotoba-lang/robotics {:local/root "../../kotoba-lang/robotics"}
+        io.github.kotoba-lang/robotics
+        {:local/root "../../kotoba-lang/kotoba/lib/kotoba.robotics"}
 
         ;; kotoba.lang.text, not clojure.string. Pinned as an explicit floor:
         ;; tools.deps takes the NEWEST sha it is shown, so without a floor here
         ;; this repo silently rides whatever a sibling happens to name.
-        io.github.kotoba-lang/text {:git/sha "73bdb13ae7a3d004b44bca08be03a3191157a38f"}
+        io.github.kotoba-lang/text
+        {:git/url "https://github.com/kotoba-lang/kotoba.git"
+         :git/sha "7e1dbe0aece831138e6106c59d2b26375d0f60c4"
+         :deps/root "lib/kotoba.text"}
        io.github.kotoba-lang/jp-go-digital-design-system
-        {:git/url "https://github.com/kotoba-lang/jp-go-digital-design-system"
-         :git/sha "f9ef46980869cc0bedddc3c552ccfd7add7cffe0"}
+        {:git/url "https://github.com/kotoba-lang/kotoba.git"
+         :git/sha "7e1dbe0aece831138e6106c59d2b26375d0f60c4"
+         :deps/root "lib/kotoba.jpGoDigitalDesignSystem"}
         ;; html/css を top-level で git 座標に固定する。推移依存(:local/root)と
         ;; jp-go-dds(:git/sha)で座標型が違うと tools.deps が版を比較できない。
         io.github.kotoba-lang/html
-        {:git/url "https://github.com/kotoba-lang/html" :git/sha "00a4c2ad43dde3df9d54b658961143c53945a379"}
+        {:git/url "https://github.com/kotoba-lang/kotoba.git"
+         :git/sha "7e1dbe0aece831138e6106c59d2b26375d0f60c4"
+         :deps/root "lib/kotoba.html"}
         io.github.kotoba-lang/css
-        {:git/url "https://github.com/kotoba-lang/css" :git/sha "6eda5ee28ec177b9e09fdbee92c55a050b18cf7d"}
+        {:git/url "https://github.com/kotoba-lang/kotoba.git"
+         :git/sha "7e1dbe0aece831138e6106c59d2b26375d0f60c4"
+         :deps/root "lib/kotoba.css"}
 io.github.com-junkawasaki/langgraph-clj
         {:local/root "../../kotoba-lang/langgraph"}
         ;; optional: brokerage.corporate-intel's cross-reference into
@@ -83,7 +100,7 @@ io.github.com-junkawasaki/langgraph-clj
                       ;; wasm/README.md) -- test-only, the actor's own
                       ;; runtime code has no wasm/host dependency.
                       io.github.kotoba-lang/kototama
-                      {:local/root "../../kotoba-lang/kototama"}}
+        {:local/root "../../kotoba-lang/kotoba/lib/kotoba.kototama"}}
          :main-opts ["-m" "cognitect.test-runner"]
          :exec-fn cognitect.test-runner.api/test}
   ;; PRIMARY gate: the same portable .cljc suite under a real
